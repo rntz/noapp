@@ -1,2 +1,8 @@
 #lang reader "noapp.rkt" ;; -*- mode: racket -*-
 
+(define (fac x)
+  (match x
+    (0 1)
+    (n {* n {fac {- n 1}}})))
+
+[displayln [fac 5]]

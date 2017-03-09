@@ -1,13 +1,10 @@
 #lang racket
 
-(provide noapp-read noapp-read-syntax noapp-reader! make-noapp-readtable)
+(provide noapp-read noapp-read-syntax use-noapp-reader! make-noapp-readtable)
 
 (require syntax/readerr)
 
-(define (add-magic pre-stx)
-  (cons #'#%app pre-stx))
-
-(define (noapp-reader!)
+(define (use-noapp-reader!)
   (current-readtable (make-noapp-readtable)))
 
 (define (noapp-read in)
@@ -20,7 +17,8 @@
 
 (define (make-noapp-readtable)
   (make-readtable (current-readtable)
-   #\{ 'terminating-macro (brackets-reader #\} #'#%app)))
+   #\{ 'terminating-macro (brackets-reader #\} '#%call)
+   #\[ 'terminating-macro (brackets-reader #\] '#%call)))
 
 (define ((brackets-reader end-char symbol-to-add)
          char in src line col pos)
